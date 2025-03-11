@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Influencer Marketing Dashboard</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+document.querySelectorAll('.menu-item').forEach(item => {
+const button = item.querySelector('button');
+const submenu = item.querySelector('.submenu');
+const arrow = item.querySelector('.ri-arrow-down-s-line');
+button.addEventListener('click', () => {
+const isExpanded = submenu.style.maxHeight !== '0px' && submenu.style.maxHeight !== '';
+// Close all other submenus
+document.querySelectorAll('.menu-item').forEach(otherItem => {
+if (otherItem !== item) {
+const otherSubmenu = otherItem.querySelector('.submenu');
+const otherArrow = otherItem.querySelector('.ri-arrow-down-s-line');
+otherSubmenu.style.maxHeight = '0px';
+otherArrow.style.transform = 'rotate(0deg)';
+}
+});
+// Toggle current submenu
+if (isExpanded) {
+submenu.style.maxHeight = '0px';
+arrow.style.transform = 'rotate(0deg)';
+} else {
+submenu.style.maxHeight = submenu.scrollHeight + 'px';
+arrow.style.transform = 'rotate(180deg)';
+}
+});
+});
+tailwind.config = {
+theme: {
+extend: {
+colors: {
+primary: '#9333EA',
+secondary: '#EC4899'
+},
+borderRadius: {
+'none': '0px',
+'sm': '4px',
+DEFAULT: '8px',
+'md': '12px',
+'lg': '16px',
+'xl': '20px',
+'2xl': '24px',
+'3xl': '32px',
+'full': '9999px',
+'button': '8px'
+}
+}
+}
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
+<style>
+:where([class^="ri-"])::before { content: "\f3c2"; }
+.dark-mode {
+background-color: #121212;
+color: #ffffff;
+}
+.surface {
+background-color: #1E1E1E;
+}
+</style>
+</head>
+<body class="dark-mode min-h-screen flex">
+<aside class="surface w-64 h-screen fixed left-0 top-0 border-r border-gray-800">
+<div class="p-6">
+<h1 class="font-['Montserrat'] text-2xl flex items-center">
+<img src="https://static.readdy.ai/image/c94bb52cd12cfad95ce2e4e83573e05f/b5eacb2ce6d759a20cc3b074c98ed1e4.png" alt="Quokka AI Logo" class="h-8 mr-2">
+<span class="text-white">Quokka</span> <span class="text-pink-500">AI</span>
+</h1>
+</div>
+<nav class="mt-6">
+<div class="menu-item">
+<button class="flex items-center justify-between w-full px-6 py-3 text-white bg-primary">
+<div class="flex items-center">
+<div class="w-6 h-6 flex items-center justify-center">
+<i class="ri-dashboard-line"></i>
+</div>
+<span class="ml-3">Dashboard</span>
+</div>
+<i class="ri-arrow-down-s-line transition-transform duration-200 transform rotate-0"></i>
+</button>
+<div class="submenu pl-12 bg-gray-900 overflow-hidden transition-all duration-200 max-h-0">
+<a href="#" class="block py-2 text-gray-400 hover:text-white">Social Media Trends</a>
+<a href="#" class="block py-2 text-gray-400 hover:text-white">Trending Keywords</a>
+<a href="#" class="block py-2 text-gray-400 hover:text-white">Influencer Rankings</a>
+<a href="#" class="block py-2 text-gray-400 hover:text-white">Brand Exposure Analysis</a>
+</div>
+</div>
+<div class="menu-item">
+<button class="flex items-center justify-between w-full px-6 py-3 text-gray-400 hover:bg-gray-800">
+<div class="flex items-center">
+<div class="w-6 h-6 flex items-center justify-center">
+<i class="ri-megaphone-line"></i>
+</div>
+<span class="ml-3">Campaigns</span>
+</div>
+<i class="ri-arrow-down-s-line transition-transform duration-200 transform rotate-0"></i>
+</button>
+<div class="submenu pl-12 bg-gray-900 overflow-hidden transition-all duration-200 max-h-0">
+<a href="#" class="block py-2 text-gray-400 hover:text-white">Active Campaigns</a>
+<a href="#" class="block py-2 text-gray-400 hover:text-white">Completed Campaigns</a>
+<a href="#" class="block py-2 text-gray-400 hover:text-white">New Campaign</a>
+<a href="#" class="block py-2 text-gray-400 hover:text-white">Campaign Performance</a>
+</div>
+</div>
+<div class="menu-item">
+<button class="flex items-center justify-between w-full px-6 py-3 text-gray-400 hover:bg-gray-800">
+<div class="flex items-center">
+<div class="w-6 h-6 flex items-center justify-center">
+<i class="ri-bar-chart-line"></i>
+</div>
+<span class="ml-3">Analytics</span>
+</div>
+<i class="ri-arrow-down-s-line transition-transform duration-200 transform rotate-0"></i>
+</button>
+<div class="submenu pl-12 bg-gray-900 overflow-hidden transition-all duration-200 max-h-0">
+<a href="#" class="block py-2 text-gray-400 hover:text-white">Engagement Metrics</a>
+<a href="#" class="block py-2 text-gray-400 hover:text-white">Trend Analysis</a>
+<a href="#" class="block py-2 text-gray-400 hover:text-white">Keyword Popularity</a>
+</div>
+</div>
+<div class="menu-item">
+<button class="flex items-center justify-between w-full px-6 py-3 text-gray-400 hover:bg-gray-800">
+<div class="flex items-center">
+<div class="w-6 h-6 flex items-center justify-center">
+<i class="ri-group-line"></i>
+</div>
+<span class="ml-3">Influencers</span>
+</div>
+<i class="ri-arrow-down-s-line transition-transform duration-200 transform rotate-0"></i>
+</button>
+<div class="submenu pl-12 bg-gray-900 overflow-hidden transition-all duration-200 max-h-0">
+<a href="#" class="block py-2 text-gray-400 hover:text-white">Discover Influencers</a>
+<a href="#" class="block py-2 text-gray-400 hover:text-white">Influencer Reports</a>
+</div>
+</div>
+<div class="menu-item">
+<button class="flex items-center justify-between w-full px-6 py-3 text-gray-400 hover:bg-gray-800">
+<div class="flex items-center">
+<div class="w-6 h-6 flex items-center justify-center">
+<i class="ri-magic-line"></i>
+</div>
+<span class="ml-3">AI Content</span>
+</div>
+<i class="ri-arrow-down-s-line transition-transform duration-200 transform rotate-0"></i>
+</button>
+<div class="submenu pl-12 bg-gray-900 overflow-hidden transition-all duration-200 max-h-0">
+<a href="#" class="block py-2 text-gray-400 hover:text-white">Generate Ideas</a>
+</div>
+</div>
+</nav>
+</aside>
+<main class="ml-64 flex-1 p-8">
+<div class="flex justify-between items-center mb-8">
+<div class="flex items-center gap-4">
+<h2 class="text-2xl font-semibold">Overview</h2>
+<div class="relative inline-block">
+<button id="dateRangeBtn" class="flex items-center gap-2 surface border border-gray-700 rounded-full py-2 px-4 text-sm focus:outline-none hover:border-primary">
+<i class="ri-calendar-line"></i>
+<span id="dateRangeText">Last 7 Days</span>
+<i class="ri-arrow-down-s-line ml-2"></i>
+</button>
+<div id="dateRangePicker" class="hidden absolute mt-2 p-4 surface border border-gray-700 rounded-lg shadow-lg z-50 w-64">
+<div class="space-y-4">
+<div>
+<label class="block text-sm mb-2">Start Date</label>
+<input type="date" id="startDate" class="w-full surface border border-gray-700 rounded py-2 px-3 text-sm focus:outline-none focus:border-primary">
+</div>
+<div>
+<label class="block text-sm mb-2">End Date</label>
+<input type="date" id="endDate" class="w-full surface border border-gray-700 rounded py-2 px-3 text-sm focus:outline-none focus:border-primary">
+</div>
+<div class="flex justify-between">
+<button class="text-sm text-gray-400 hover:text-white" onclick="setDateRange('7')">Last 7 Days</button>
+<button class="text-sm text-gray-400 hover:text-white" onclick="setDateRange('30')">Last 30 Days</button>
+</div>
+<button class="w-full bg-primary text-white py-2 rounded-button mt-2" onclick="applyDateRange()">Apply</button>
+</div>
+</div>
+</div>
+</div>
+<div class="flex gap-4">
+<button class="w-10 h-10 flex items-center justify-center text-gray-400 hover:text-white bg-gray-800 rounded-full">
+<i class="ri-settings-3-line"></i>
+</button>
+</div>
+</div>
+<div class="mb-8">
+<div class="flex justify-between items-center mb-4">
+<h3 class="text-xl font-semibold">Trends</h3>
+<button class="text-primary hover:text-primary/80 text-sm flex items-center gap-1">
+See more
+<i class="ri-arrow-right-line"></i>
+</button>
+</div>
+<div class="grid grid-cols-3 gap-6">
+<div class="surface p-6 rounded col-span-2">
+<h3 class="text-lg font-semibold mb-6">Social Media Trends</h3>
+<div id="trendChart" class="h-80"></div>
+</div>
+<div class="surface p-6 rounded">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-lg font-semibold">Trending Keywords</h3>
+<select class="surface border border-gray-700 rounded-full py-1 px-3 text-sm focus:outline-none focus:border-primary">
+<option>Last 7 Days</option>
+<option>Last 30 Days</option>
+</select>
+</div>
+<div id="keywordChart" class="h-80"></div>
+</div>
+</div>
+</div>
+<div class="mb-8">
+<div class="flex justify-between items-center mb-4">
+<h3 class="text-xl font-semibold">Campaign Status</h3>
+<button class="text-primary hover:text-primary/80 text-sm flex items-center gap-1">
+See more
+<i class="ri-arrow-right-line"></i>
+</button>
+</div>
+<div class="grid grid-cols-4 gap-6">
+<div class="surface p-6 rounded hover:bg-surfaceLight transition-colors group relative">
+<div class="flex items-center mb-6">
+<div class="w-12 h-12 flex items-center justify-center text-[#E4405F] bg-[#E4405F] bg-opacity-10 rounded-lg">
+<i class="ri-instagram-line ri-2x"></i>
+</div>
+<div class="ml-4 flex-1">
+<h4 class="text-gray-400 text-sm">Instagram</h4>
+<div class="text-2xl font-bold flex items-center gap-2">
+45.2K
+<span class="text-sm text-green-500 flex items-center">
+<i class="ri-arrow-up-line"></i>
+12.5%
+</span>
+</div>
+</div>
+<button class="opacity-0 group-hover:opacity-100 transition-opacity bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-button flex items-center text-sm whitespace-nowrap">
+<i class="ri-eye-line mr-2"></i>
+View Details
+</button>
+</div>
+<div class="grid grid-cols-5 gap-4 p-4 bg-gray-900/50 rounded-lg mb-4">
+<div class="text-center" data-tooltip="Click-Through Rate">
+<div class="text-xs text-gray-400 mb-1">CTR</div>
+<div class="text-sm font-semibold">2.8%</div>
+</div>
+<div class="text-center" data-tooltip="Cost Per Click">
+<div class="text-xs text-gray-400 mb-1">CPC</div>
+<div class="text-sm font-semibold">$0.42</div>
+</div>
+<div class="text-center" data-tooltip="Return on Ad Spend">
+<div class="text-xs text-gray-400 mb-1">ROAS</div>
+<div class="text-sm font-semibold">3.2x</div>
+</div>
+<div class="text-center" data-tooltip="Conversion Rate">
+<div class="text-xs text-gray-400 mb-1">Conv.</div>
+<div class="text-sm font-semibold">4.5%</div>
+</div>
+<div class="text-center" data-tooltip="Total Campaign Spend">
+<div class="text-xs text-gray-400 mb-1">Spend</div>
+<div class="text-sm font-semibold">$2,450</div>
+</div>
+</div>
+<div class="flex items-center">
+<div class="flex-1">
+<div class="h-2 bg-gray-800 rounded-full">
+<div class="h-2 bg-[#E4405F] rounded-full" style="width: 75%"></div>
+</div>
+</div>
+<span class="ml-3 text-sm text-gray-400">75% of Goal</span>
+</div>
+</div>
+<div class="surface p-6 rounded hover:bg-surfaceLight transition-colors group relative">
+<div class="flex items-center mb-6">
+<div class="w-12 h-12 flex items-center justify-center text-[#000000] bg-[#00F2EA] bg-opacity-10 rounded-lg">
+<i class="ri-tiktok-line ri-2x"></i>
+</div>
+<div class="ml-4 flex-1">
+<h4 class="text-gray-400 text-sm">TikTok</h4>
+<div class="text-2xl font-bold flex items-center gap-2">
+89.7K
+<span class="text-sm text-green-500 flex items-center">
+<i class="ri-arrow-up-line"></i>
+28.3%
+</span>
+</div>
+</div>
+<button class="opacity-0 group-hover:opacity-100 transition-opacity bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-button flex items-center text-sm whitespace-nowrap">
+<i class="ri-eye-line mr-2"></i>
+View Details
+</button>
+</div>
+<div class="grid grid-cols-5 gap-4 p-4 bg-gray-900/50 rounded-lg mb-4">
+<div class="text-center">
+<div class="text-xs text-gray-400 mb-1">CTR</div>
+<div class="text-sm font-semibold">3.4%</div>
+</div>
+<div class="text-center">
+<div class="text-xs text-gray-400 mb-1">CPC</div>
+<div class="text-sm font-semibold">$0.38</div>
+</div>
+<div class="text-center">
+<div class="text-xs text-gray-400 mb-1">ROAS</div>
+<div class="text-sm font-semibold">4.1x</div>
+</div>
+<div class="text-center">
+<div class="text-xs text-gray-400 mb-1">Conv.</div>
+<div class="text-sm font-semibold">5.2%</div>
+</div>
+<div class="text-center">
+<div class="text-xs text-gray-400 mb-1">Spend</div>
+<div class="text-sm font-semibold">$3,250</div>
+</div>
+</div>
+<div class="flex items-center">
+<div class="flex-1">
+<div class="h-2 bg-gray-800 rounded-full">
+<div class="h-2 bg-[#00F2EA] rounded-full" style="width: 85%"></div>
+</div>
+</div>
+<span class="ml-3 text-sm text-gray-400">85% of Goal</span>
+</div>
+</div>
+<div class="surface p-6 rounded hover:bg-surfaceLight transition-colors group relative">
+<div class="flex items-center mb-6">
+<div class="w-12 h-12 flex items-center justify-center text-[#FF0000] bg-[#FF0000] bg-opacity-10 rounded-lg">
+<i class="ri-youtube-line ri-2x"></i>
+</div>
+<div class="ml-4 flex-1">
+<h4 class="text-gray-400 text-sm">YouTube</h4>
+<div class="text-2xl font-bold flex items-center gap-2">
+32.1K
+<span class="text-sm text-green-500 flex items-center">
+<i class="ri-arrow-up-line"></i>
+8.7%
+</span>
+</div>
+</div>
+<button class="opacity-0 group-hover:opacity-100 transition-opacity bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-button flex items-center text-sm whitespace-nowrap">
+<i class="ri-eye-line mr-2"></i>
+View Details
+</button>
+</div>
+<div class="grid grid-cols-5 gap-4 p-4 bg-gray-900/50 rounded-lg mb-4">
+<div class="text-center">
+<div class="text-xs text-gray-400 mb-1">CTR</div>
+<div class="text-sm font-semibold">2.1%</div>
+</div>
+<div class="text-center">
+<div class="text-xs text-gray-400 mb-1">CPC</div>
+<div class="text-sm font-semibold">$0.56</div>
+</div>
+<div class="text-center">
+<div class="text-xs text-gray-400 mb-1">ROAS</div>
+<div class="text-sm font-semibold">2.8x</div>
+</div>
+<div class="text-center">
+<div class="text-xs text-gray-400 mb-1">Conv.</div>
+<div class="text-sm font-semibold">3.2%</div>
+</div>
+<div class="text-center">
+<div class="text-xs text-gray-400 mb-1">Spend</div>
+<div class="text-sm font-semibold">$1,850</div>
+</div>
+</div>
+<div class="flex items-center">
+<div class="flex-1">
+<div class="h-2 bg-gray-800 rounded-full">
+<div class="h-2 bg-[#FF0000] rounded-full" style="width: 65%"></div>
+</div>
+</div>
+<span class="ml-3 text-sm text-gray-400">65% of Goal</span>
+</div>
+</div>
+<div class="surface p-6 rounded hover:bg-surfaceLight transition-colors group relative">
+<div class="flex items-center mb-6">
+<div class="w-12 h-12 flex items-center justify-center text-primary bg-primary bg-opacity-10 rounded-lg">
+<i class="ri-global-line ri-2x"></i>
+</div>
+<div class="ml-4 flex-1">
+<h4 class="text-gray-400 text-sm">Total Performance</h4>
+<div class="text-2xl font-bold flex items-center gap-2">
+167K
+<span class="text-sm text-green-500 flex items-center">
+<i class="ri-arrow-up-line"></i>
+16.8%
+</span>
+</div>
+</div>
+<button class="opacity-0 group-hover:opacity-100 transition-opacity bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-button flex items-center text-sm whitespace-nowrap">
+<i class="ri-file-chart-line mr-2"></i>
+View Report
+</button>
+</div>
+<div class="grid grid-cols-5 gap-4 p-4 bg-gray-900/50 rounded-lg mb-4">
+<div class="text-center">
+<div class="text-xs text-gray-400 mb-1">Avg CTR</div>
+<div class="text-sm font-semibold">2.8%</div>
+</div>
+<div class="text-center">
+<div class="text-xs text-gray-400 mb-1">Avg CPC</div>
+<div class="text-sm font-semibold">$0.45</div>
+</div>
+<div class="text-center">
+<div class="text-xs text-gray-400 mb-1">Avg ROAS</div>
+<div class="text-sm font-semibold">3.4x</div>
+</div>
+<div class="text-center">
+<div class="text-xs text-gray-400 mb-1">Avg Conv.</div>
+<div class="text-sm font-semibold">4.3%</div>
+</div>
+<div class="text-center">
+<div class="text-xs text-gray-400 mb-1">Total Spend</div>
+<div class="text-sm font-semibold">$7,550</div>
+</div>
+</div>
+<div class="flex items-center">
+<div class="flex-1">
+<div class="h-2 bg-gray-800 rounded-full">
+<div class="h-2 bg-primary rounded-full" style="width: 80%"></div>
+</div>
+</div>
+<span class="ml-3 text-sm text-gray-400">80% of Goal</span>
+</div>
+</div>
+</div>
+</div>
+<div class="surface p-6 rounded mb-8">
+<div class="flex justify-between items-center mb-4">
+<h3 class="text-lg font-semibold">Performance Metrics</h3>
+<button class="text-primary hover:text-primary/80 text-sm flex items-center gap-1">
+See more
+<i class="ri-arrow-right-line"></i>
+</button>
+</div>
+<div class="grid grid-cols-6 gap-6">
+<div class="col-span-2">
+<div class="flex items-center mb-4">
+<div class="w-12 h-12 flex items-center justify-center text-primary bg-primary bg-opacity-10 rounded-lg">
+<i class="ri-message-3-line ri-2x"></i>
+</div>
+<div class="ml-4">
+<h3 class="text-gray-400 text-sm">Brand Mentions</h3>
+<div class="flex items-baseline">
+<span class="text-3xl font-bold">15.2K</span>
+<span class="ml-2 text-secondary text-sm">+18.5%</span>
+</div>
+</div>
+</div>
+<div class="h-2 bg-gray-800 rounded-full">
+<div class="h-2 bg-primary rounded-full" style="width: 75%"></div>
+</div>
+</div>
+<div class="col-span-2">
+<div class="flex items-center mb-4">
+<div class="w-12 h-12 flex items-center justify-center text-primary bg-primary bg-opacity-10 rounded-lg">
+<i class="ri-emotion-happy-line ri-2x"></i>
+</div>
+<div class="ml-4">
+<h3 class="text-gray-400 text-sm">Sentiment Score</h3>
+<div class="flex items-baseline">
+<span class="text-3xl font-bold">8.4</span>
+<span class="ml-2 text-secondary text-sm">+0.6</span>
+</div>
+</div>
+</div>
+<div class="h-2 bg-gray-800 rounded-full">
+<div class="h-2 bg-primary rounded-full" style="width: 84%"></div>
+</div>
+</div>
+<div class="col-span-2">
+<div class="flex items-center mb-4">
+<div class="w-12 h-12 flex items-center justify-center text-primary bg-primary bg-opacity-10 rounded-lg">
+<i class="ri-fire-line ri-2x"></i>
+</div>
+<div class="ml-4">
+<h3 class="text-gray-400 text-sm">Viral Content</h3>
+<div class="flex items-baseline">
+<span class="text-3xl font-bold">24</span>
+<span class="ml-2 text-secondary text-sm">+5</span>
+</div>
+</div>
+</div>
+<div class="h-2 bg-gray-800 rounded-full">
+<div class="h-2 bg-primary rounded-full" style="width: 60%"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-6 mb-8">
+<div class="surface p-6 rounded hover:bg-surfaceLight transition-colors">
+<div class="flex justify-between items-center mb-6">
+<div>
+<h3 class="text-lg font-semibold">Influencer Rankings</h3>
+<p class="text-sm text-gray-400 mt-1">Top performing influencers by engagement</p>
+</div>
+<select class="surface border border-gray-700 rounded-full py-2 px-4 text-sm focus:outline-none focus:border-primary">
+<option>Last 7 Days</option>
+<option>Last 30 Days</option>
+<option>Last 90 Days</option>
+</select>
+</div>
+<div class="space-y-4">
+<div class="flex items-center justify-between p-3 border border-gray-800 rounded">
+<div class="flex items-center">
+<div class="text-xl font-bold text-primary mr-4">1</div>
+<img src="https://public.readdy.ai/ai/img_res/58d858971f6f4e5c60b36995b73bad8d.jpg" class="w-10 h-10 rounded-full" alt="">
+<div class="ml-3">
+<h4 class="font-semibold">Emma Thompson</h4>
+<div class="flex items-center text-sm text-gray-400">
+<i class="ri-arrow-up-line text-green-500 mr-1"></i>
+<span>Moved up 2 positions</span>
+</div>
+</div>
+</div>
+<div class="text-right">
+<div class="font-semibold">2.8M</div>
+<div class="text-sm text-gray-400">Followers</div>
+</div>
+</div>
+<div class="flex items-center justify-between p-3 border border-gray-800 rounded">
+<div class="flex items-center">
+<div class="text-xl font-bold text-primary mr-4">2</div>
+<img src="https://public.readdy.ai/ai/img_res/098ed87d05811bc6ee89978dd4afd7ff.jpg" class="w-10 h-10 rounded-full" alt="">
+<div class="ml-3">
+<h4 class="font-semibold">Alex Rivera</h4>
+<div class="flex items-center text-sm text-gray-400">
+<i class="ri-arrow-down-line text-red-500 mr-1"></i>
+<span>Moved down 1 position</span>
+</div>
+</div>
+</div>
+<div class="text-right">
+<div class="font-semibold">2.4M</div>
+<div class="text-sm text-gray-400">Followers</div>
+</div>
+</div>
+<div class="flex items-center justify-between p-3 border border-gray-800 rounded">
+<div class="flex items-center">
+<div class="text-xl font-bold text-primary mr-4">3</div>
+<img src="https://public.readdy.ai/ai/img_res/a3183dc5467ba3c46192da9fd554bb99.jpg" class="w-10 h-10 rounded-full" alt="">
+<div class="ml-3">
+<h4 class="font-semibold">Sophie Chen</h4>
+<div class="flex items-center text-sm text-gray-400">
+<i class="ri-arrow-up-line text-green-500 mr-1"></i>
+<span>Moved up 3 positions</span>
+</div>
+</div>
+</div>
+<div class="text-right">
+<div class="font-semibold">2.1M</div>
+<div class="text-sm text-gray-400">Followers</div>
+</div>
+</div>
+</div>
+</div>
+<div class="surface p-6 rounded">
+<h3 class="text-lg font-semibold mb-6">Brand Exposure Analysis</h3>
+<div id="brandExposureChart" class="h-64"></div>
+<div class="grid grid-cols-3 gap-4 mt-6">
+<div class="text-center">
+<div class="text-2xl font-bold">458K</div>
+<div class="text-sm text-gray-400">Impressions</div>
+</div>
+<div class="text-center">
+<div class="text-2xl font-bold">32.5K</div>
+<div class="text-sm text-gray-400">Engagements</div>
+</div>
+<div class="text-center">
+<div class="text-2xl font-bold">7.1%</div>
+<div class="text-sm text-gray-400">Engagement Rate</div>
+</div>
+</div>
+</div>
+</div>
+<div class="surface p-6 rounded mb-8">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-lg font-semibold">Top Influencers</h3>
+<div class="flex items-center gap-4">
+<button class="text-primary hover:text-primary/80 text-sm flex items-center gap-1">
+See more
+<i class="ri-arrow-right-line"></i>
+</button>
+<div class="relative">
+<input type="text" placeholder="Search influencers..." class="surface border border-gray-700 rounded-full py-2 px-4 pr-10 text-sm focus:outline-none focus:border-primary w-48">
+</div>
+<div class="absolute right-3 top-2.5 w-5 h-5 flex items-center justify-center text-gray-400">
+<i class="ri-search-line"></i>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-6">
+<div class="surface border border-gray-800 rounded p-4">
+<div class="flex items-center mb-4">
+<img src="https://public.readdy.ai/ai/img_res/a0c830d8cd4d3d35835f4377119fdd86.jpg" class="w-12 h-12 rounded-full object-cover" alt="Sarah Anderson">
+<div class="ml-3 flex-1">
+<h4 class="font-semibold">Sarah Anderson</h4>
+<p class="text-sm text-gray-400">@sarahanderson</p>
+</div>
+<div class="flex gap-2">
+<i class="ri-instagram-fill text-xl text-gray-400"></i>
+<i class="ri-tiktok-fill text-xl text-gray-400"></i>
+</div>
+</div>
+<div class="flex justify-between text-sm mb-4">
+<span class="text-gray-400">Followers</span>
+<span>856K</span>
+</div>
+<div class="flex justify-between text-sm">
+<span class="text-gray-400">Engagement</span>
+<span class="text-secondary">5.2%</span>
+</div>
+</div>
+<div class="surface border border-gray-800 rounded p-4">
+<div class="flex items-center mb-4">
+<img src="https://public.readdy.ai/ai/img_res/ff18733104e2ead85da0e19c7d8ac3a5.jpg" class="w-12 h-12 rounded-full object-cover" alt="Michael Chen">
+<div class="ml-3 flex-1">
+<h4 class="font-semibold">Michael Chen</h4>
+<p class="text-sm text-gray-400">@michaelchen</p>
+</div>
+<div class="flex gap-2">
+<i class="ri-youtube-fill text-xl text-gray-400"></i>
+<i class="ri-instagram-fill text-xl text-gray-400"></i>
+</div>
+</div>
+<div class="flex justify-between text-sm mb-4">
+<span class="text-gray-400">Followers</span>
+<span>1.2M</span>
+</div>
+<div class="flex justify-between text-sm">
+<span class="text-gray-400">Engagement</span>
+<span class="text-secondary">4.8%</span>
+</div>
+</div>
+<div class="surface border border-gray-800 rounded p-4">
+<div class="flex items-center mb-4">
+<img src="https://public.readdy.ai/ai/img_res/4856774a60870ace4c8dca64287abd6a.jpg" class="w-12 h-12 rounded-full object-cover" alt="Emma Wilson">
+<div class="ml-3 flex-1">
+<h4 class="font-semibold">Emma Wilson</h4>
+<p class="text-sm text-gray-400">@emmawilson</p>
+</div>
+<div class="flex gap-2">
+<i class="ri-tiktok-fill text-xl text-gray-400"></i>
+<i class="ri-instagram-fill text-xl text-gray-400"></i>
+<i class="ri-youtube-fill text-xl text-gray-400"></i>
+</div>
+</div>
+<div class="flex justify-between text-sm mb-4">
+<span class="text-gray-400">Followers</span>
+<span>925K</span>
+</div>
+<div class="flex justify-between text-sm">
+<span class="text-gray-400">Engagement</span>
+<span class="text-secondary">6.1%</span>
+</div>
+</div>
+</div>
+</div>
+<div class="mb-8">
+<div class="flex justify-between items-center mb-4">
+<h3 class="text-xl font-semibold">AI Assistant</h3>
+<button class="text-primary hover:text-primary/80 text-sm flex items-center gap-1">
+See more
+<i class="ri-arrow-right-line"></i>
+</button>
+</div>
+<div class="grid grid-cols-2 gap-6">
+<div class="surface p-6 rounded hover:bg-surfaceLight transition-colors">
+<div class="flex justify-between items-center mb-6">
+<div>
+<h3 class="text-lg font-semibold mb-2">Auto Comment</h3>
+<p class="text-sm text-gray-400">AI-powered automatic comment generation and management</p>
+</div>
+<div class="flex items-center gap-3">
+<button class="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-button flex items-center cursor-pointer whitespace-nowrap">
+<i class="ri-settings-3-line mr-2"></i>
+Configure
+</button>
+<button class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-button flex items-center cursor-pointer whitespace-nowrap">
+<i class="ri-chat-3-line mr-2"></i>
+Activate
+</button>
+</div>
+</div>
+<div class="grid grid-cols-4 gap-4 mb-6">
+<div class="surface border border-gray-800 rounded p-4 hover:border-primary transition-colors">
+<div class="flex items-center justify-between mb-2">
+<span class="text-sm font-semibold">Comment Queue</span>
+<span class="text-sm text-primary">12</span>
+</div>
+<div class="text-xs text-gray-400">Pending comments</div>
+<div class="mt-2 text-xs text-gray-500">Last updated: 5 mins ago</div>
+</div>
+<div class="surface border border-gray-800 rounded p-4 hover:border-primary transition-colors">
+<div class="flex items-center justify-between mb-2">
+<span class="text-sm font-semibold">Posted Today</span>
+<span class="text-sm text-secondary">48</span>
+</div>
+<div class="text-xs text-gray-400">Successfully posted</div>
+<div class="mt-2 text-xs text-gray-500">Success rate: 98%</div>
+</div>
+<div class="surface border border-gray-800 rounded p-4 hover:border-primary transition-colors">
+<div class="flex items-center justify-between mb-2">
+<span class="text-sm font-semibold">Engagement</span>
+<span class="text-sm text-green-500">85%</span>
+</div>
+<div class="text-xs text-gray-400">Average response rate</div>
+<div class="mt-2 text-xs text-gray-500">↑ 12% this week</div>
+</div>
+<div class="surface border border-gray-800 rounded p-4 hover:border-primary transition-colors">
+<div class="flex items-center justify-between mb-2">
+<span class="text-sm font-semibold">AI Score</span>
+<span class="text-sm text-blue-500">9.2</span>
+</div>
+<div class="text-xs text-gray-400">Comment quality score</div>
+<div class="mt-2 text-xs text-gray-500">Based on 500+ comments</div>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-6">
+<div class="surface border border-gray-800 rounded-lg p-4">
+<div class="flex items-center justify-between mb-4">
+<h4 class="text-sm font-semibold">Comment Queue</h4>
+<div class="flex items-center gap-2">
+<span class="text-xs text-gray-400">Sort by:</span>
+<select class="surface border border-gray-700 rounded text-xs px-2 py-1">
+<option>Time</option>
+<option>Platform</option>
+</select>
+</div>
+</div>
+<div class="space-y-3">
+<div class="flex items-start gap-3 p-3 border border-gray-800 rounded hover:border-primary transition-colors">
+<div class="w-8 h-8 flex items-center justify-center text-[#E4405F] bg-[#E4405F] bg-opacity-10 rounded">
+<i class="ri-instagram-line"></i>
+</div>
+<div class="flex-1 min-w-0">
+<p class="text-sm text-gray-300 truncate">"Love the new summer collection! Can't wait to try these looks 😍"</p>
+<div class="flex items-center gap-4 mt-2">
+<span class="text-xs text-gray-400">@fashionista_emma</span>
+<span class="text-xs text-gray-500">2 mins ago</span>
+</div>
+</div>
+<button class="text-primary hover:text-primary/80">
+<i class="ri-send-plane-line"></i>
+</button>
+</div>
+<div class="flex items-start gap-3 p-3 border border-gray-800 rounded hover:border-primary transition-colors">
+<div class="w-8 h-8 flex items-center justify-center text-[#000000] bg-[#00F2EA] bg-opacity-10 rounded">
+<i class="ri-tiktok-line"></i>
+</div>
+<div class="flex-1 min-w-0">
+<p class="text-sm text-gray-300 truncate">"This skincare routine is exactly what I needed! 🌟"</p>
+<div class="flex items-center gap-4 mt-2">
+<span class="text-xs text-gray-400">@beauty_guru</span>
+<span class="text-xs text-gray-500">5 mins ago</span>
+</div>
+</div>
+<button class="text-primary hover:text-primary/80">
+<i class="ri-send-plane-line"></i>
+</button>
+</div>
+<div class="flex items-start gap-3 p-3 border border-gray-800 rounded hover:border-primary transition-colors">
+<div class="w-8 h-8 flex items-center justify-center text-[#FF0000] bg-[#FF0000] bg-opacity-10 rounded">
+<i class="ri-youtube-line"></i>
+</div>
+<div class="flex-1 min-w-0">
+<p class="text-sm text-gray-300 truncate">"Great video! The makeup tutorial was super helpful 💄"</p>
+<div class="flex items-center gap-4 mt-2">
+<span class="text-xs text-gray-400">@makeupmaster</span>
+<span class="text-xs text-gray-500">8 mins ago</span>
+</div>
+</div>
+<button class="text-primary hover:text-primary/80">
+<i class="ri-send-plane-line"></i>
+</button>
+</div>
+</div>
+</div>
+<div class="surface border border-gray-800 rounded-lg p-4">
+<div class="flex items-center justify-between mb-4">
+<h4 class="text-sm font-semibold">Posted Comments</h4>
+<div class="flex items-center gap-2">
+<span class="text-xs text-gray-400">Filter:</span>
+<select class="surface border border-gray-700 rounded text-xs px-2 py-1">
+<option>All Platforms</option>
+<option>Instagram</option>
+<option>TikTok</option>
+<option>YouTube</option>
+</select>
+</div>
+</div>
+<div class="space-y-3">
+<div class="flex items-start gap-3 p-3 border border-gray-800 rounded">
+<div class="w-8 h-8 flex items-center justify-center text-[#E4405F] bg-[#E4405F] bg-opacity-10 rounded">
+<i class="ri-instagram-line"></i>
+</div>
+<div class="flex-1 min-w-0">
+<p class="text-sm text-gray-300 truncate">"These products have transformed my skincare routine! 🌿✨"</p>
+<div class="flex items-center gap-4 mt-2">
+<span class="text-xs text-gray-400">@skincare_lover</span>
+<div class="flex items-center gap-1 text-xs text-gray-500">
+<i class="ri-heart-line"></i>
+<span>24</span>
+</div>
+<span class="text-xs text-green-500">Posted</span>
+</div>
+</div>
+</div>
+<div class="flex items-start gap-3 p-3 border border-gray-800 rounded">
+<div class="w-8 h-8 flex items-center justify-center text-[#000000] bg-[#00F2EA] bg-opacity-10 rounded">
+<i class="ri-tiktok-line"></i>
+</div>
+<div class="flex-1 min-w-0">
+<p class="text-sm text-gray-300 truncate">"Your dance challenge inspired me to try the new workout routine! 💪"</p>
+<div class="flex items-center gap-4 mt-2">
+<span class="text-xs text-gray-400">@fitness_junkie</span>
+<div class="flex items-center gap-1 text-xs text-gray-500">
+<i class="ri-heart-line"></i>
+<span>42</span>
+</div>
+<span class="text-xs text-green-500">Posted</span>
+</div>
+</div>
+</div>
+<div class="flex items-start gap-3 p-3 border border-gray-800 rounded">
+<div class="w-8 h-8 flex items-center justify-center text-[#FF0000] bg-[#FF0000] bg-opacity-10 rounded">
+<i class="ri-youtube-line"></i>
+</div>
+<div class="flex-1 min-w-0">
+<p class="text-sm text-gray-300 truncate">"The tips in this video helped me perfect my contouring technique! 🎨"</p>
+<div class="flex items-center gap-4 mt-2">
+<span class="text-xs text-gray-400">@beauty_pro</span>
+<div class="flex items-center gap-1 text-xs text-gray-500">
+<i class="ri-heart-line"></i>
+<span>18</span>
+</div>
+<span class="text-xs text-green-500">Posted</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="surface p-6 rounded hover:bg-surfaceLight transition-colors">
+<div class="flex justify-between items-center mb-6">
+<div>
+<h3 class="text-lg font-semibold mb-2">Content Generation</h3>
+<p class="text-sm text-gray-400">AI-powered content creation and optimization</p>
+</div>
+<div class="flex items-center gap-3">
+<div class="relative">
+<select class="appearance-none surface border border-gray-700 rounded-full py-2 pl-4 pr-10 text-sm focus:outline-none focus:border-primary">
+<option>Beauty & Wellness</option>
+<option>Fashion & Style</option>
+<option>Tech & Gadgets</option>
+<option>Food & Beverage</option>
+<option>Travel & Lifestyle</option>
+</select>
+<div class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+<i class="ri-arrow-down-s-line"></i>
+</div>
+</div>
+<button class="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-button flex items-center cursor-pointer whitespace-nowrap">
+<i class="ri-history-line mr-2"></i>
+History
+</button>
+<button class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-button flex items-center cursor-pointer whitespace-nowrap">
+<i class="ri-magic-line mr-2"></i>
+Generate Ideas
+</button>
+</div>
+</div>
+<div class="grid grid-cols-4 gap-4 mb-6">
+<div class="surface border border-gray-800 rounded p-4 hover:border-primary transition-colors">
+<div class="flex items-center justify-between mb-2">
+<span class="text-sm font-semibold">Generated Today</span>
+<span class="text-sm text-primary">24</span>
+</div>
+<div class="text-xs text-gray-400">Content pieces</div>
+<div class="mt-2 text-xs text-gray-500">↑ 8 from yesterday</div>
+</div>
+<div class="surface border border-gray-800 rounded p-4 hover:border-primary transition-colors">
+<div class="flex items-center justify-between mb-2">
+<span class="text-sm font-semibold">Approved</span>
+<span class="text-sm text-green-500">18</span>
+</div>
+<div class="text-xs text-gray-400">Ready to publish</div>
+<div class="mt-2 text-xs text-gray-500">75% approval rate</div>
+</div>
+<div class="surface border border-gray-800 rounded p-4 hover:border-primary transition-colors">
+<div class="flex items-center justify-between mb-2">
+<span class="text-sm font-semibold">In Review</span>
+<span class="text-sm text-yellow-500">6</span>
+</div>
+<div class="text-xs text-gray-400">Pending approval</div>
+<div class="mt-2 text-xs text-gray-500">Avg. review time: 2h</div>
+</div>
+<div class="surface border border-gray-800 rounded p-4 hover:border-primary transition-colors">
+<div class="flex items-center justify-between mb-2">
+<span class="text-sm font-semibold">Credits Left</span>
+<span class="text-sm text-blue-500">850</span>
+</div>
+<div class="text-xs text-gray-400">Monthly limit: 1000</div>
+<div class="mt-2 text-xs text-gray-500">Renews in 12 days</div>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-6">
+<div class="surface border border-gray-800 rounded p-4 hover:border-primary transition-colors">
+<div class="flex justify-between items-center mb-4">
+<div class="flex items-center">
+<div class="w-8 h-8 flex items-center justify-center text-primary bg-primary bg-opacity-10 rounded">
+<i class="ri-instagram-line ri-lg"></i>
+</div>
+<span class="ml-2 text-sm text-gray-400">Instagram Reel</span>
+</div>
+<div class="flex gap-2">
+<button class="text-gray-400 hover:text-white cursor-pointer w-8 h-8 flex items-center justify-center rounded hover:bg-gray-800">
+<i class="ri-edit-line"></i>
+</button>
+<button class="text-gray-400 hover:text-white cursor-pointer w-8 h-8 flex items-center justify-center rounded hover:bg-gray-800">
+<i class="ri-file-copy-line"></i>
+</button>
+</div>
+</div>
+<p class="text-sm text-gray-300 mb-4">"Share your morning routine with a twist - showcase how our product seamlessly fits into your wellness journey #MorningWithUs"</p>
+<div class="flex justify-between text-xs text-gray-400">
+<span>Estimated Reach: 50K-100K</span>
+<span>Engagement Rate: 4.8%</span>
+</div>
+</div>
+<div class="surface border border-gray-800 rounded p-4 hover:border-primary transition-colors">
+<div class="flex justify-between items-center mb-4">
+<div class="flex items-center">
+<div class="w-8 h-8 flex items-center justify-center text-primary bg-primary bg-opacity-10 rounded">
+<i class="ri-tiktok-line ri-lg"></i>
+</div>
+<span class="ml-2 text-sm text-gray-400">TikTok Video</span>
+</div>
+<div class="flex gap-2">
+<button class="text-gray-400 hover:text-white cursor-pointer w-8 h-8 flex items-center justify-center rounded hover:bg-gray-800">
+<i class="ri-edit-line"></i>
+</button>
+<button class="text-gray-400 hover:text-white cursor-pointer w-8 h-8 flex items-center justify-center rounded hover:bg-gray-800">
+<i class="ri-file-copy-line"></i>
+</button>
+</div>
+</div>
+<p class="text-sm text-gray-300 mb-4">"Create a before/after transition video showing the impact of our skincare routine #GlowUpChallenge"</p>
+<div class="flex justify-between text-xs text-gray-400">
+<span>Estimated Reach: 100K-200K</span>
+<span>Engagement Rate: 6.2%</span>
+</div>
+</div>
+<div class="surface border border-gray-800 rounded p-4 hover:border-primary transition-colors">
+<div class="flex justify-between items-center mb-4">
+<div class="flex items-center">
+<div class="w-8 h-8 flex items-center justify-center text-primary bg-primary bg-opacity-10 rounded">
+<i class="ri-youtube-line ri-lg"></i>
+</div>
+<span class="ml-2 text-sm text-gray-400">YouTube Video</span>
+</div>
+<div class="flex gap-2">
+<button class="text-gray-400 hover:text-white cursor-pointer w-8 h-8 flex items-center justify-center rounded hover:bg-gray-800">
+<i class="ri-edit-line"></i>
+</button>
+<button class="text-gray-400 hover:text-white cursor-pointer w-8 h-8 flex items-center justify-center rounded hover:bg-gray-800">
+<i class="ri-file-copy-line"></i>
+</button>
+</div>
+</div>
+<p class="text-sm text-gray-300 mb-4">"Film a day-in-the-life vlog incorporating our sustainable products into your eco-friendly lifestyle #SustainableLife"</p>
+<div class="flex justify-between text-xs text-gray-400">
+<span>Estimated Reach: 75K-150K</span>
+<span>Engagement Rate: 5.5%</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+<script>
+document.querySelectorAll('.menu-item').forEach(item => {
+const button = item.querySelector('button');
+const submenu = item.querySelector('.submenu');
+const arrow = item.querySelector('.ri-arrow-down-s-line');
+button.addEventListener('click', () => {
+const isExpanded = submenu.style.maxHeight !== '0px' && submenu.style.maxHeight !== '';
+// Close all other submenus
+document.querySelectorAll('.menu-item').forEach(otherItem => {
+if (otherItem !== item) {
+const otherSubmenu = otherItem.querySelector('.submenu');
+const otherArrow = otherItem.querySelector('.ri-arrow-down-s-line');
+otherSubmenu.style.maxHeight = '0px';
+otherArrow.style.transform = 'rotate(0deg)';
+}
+});
+// Toggle current submenu
+if (isExpanded) {
+submenu.style.maxHeight = '0px';
+arrow.style.transform = 'rotate(0deg)';
+} else {
+submenu.style.maxHeight = submenu.scrollHeight + 'px';
+arrow.style.transform = 'rotate(180deg)';
+}
+});
+});
+const trendChart = echarts.init(document.getElementById('trendChart'));
+const brandExposureChart = echarts.init(document.getElementById('brandExposureChart'));
+const keywordChart = echarts.init(document.getElementById('keywordChart'));
+const trendOption = {
+animation: false,
+tooltip: {
+trigger: 'axis',
+backgroundColor: 'rgba(30, 30, 30, 0.9)',
+borderColor: '#374151',
+textStyle: {
+color: '#ffffff'
+}
+},
+legend: {
+data: ['Instagram', 'TikTok', 'YouTube', 'Facebook'],
+textStyle: {
+color: '#9CA3AF'
+},
+top: 0
+},
+grid: {
+top: 40,
+right: 20,
+bottom: 20,
+left: 40
+},
+xAxis: {
+type: 'category',
+data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+axisLine: {
+lineStyle: {
+color: '#4B5563'
+}
+},
+axisLabel: {
+color: '#9CA3AF'
+}
+},
+yAxis: {
+type: 'value',
+name: 'Trending Score',
+nameTextStyle: {
+color: '#9CA3AF'
+},
+axisLine: {
+lineStyle: {
+color: '#4B5563'
+}
+},
+axisLabel: {
+color: '#9CA3AF'
+},
+splitLine: {
+lineStyle: {
+color: '#374151'
+}
+}
+},
+series: [
+{
+name: 'Instagram',
+type: 'line',
+smooth: true,
+symbol: 'none',
+data: [120, 132, 101, 134, 90, 230, 210],
+lineStyle: {
+color: '#E4405F'
+},
+areaStyle: {
+color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+offset: 0,
+color: 'rgba(87, 181, 231, 0.1)'
+}, {
+offset: 1,
+color: 'rgba(87, 181, 231, 0)'
+}])
+}
+},
+{
+name: 'TikTok',
+type: 'line',
+smooth: true,
+symbol: 'none',
+data: [220, 182, 191, 234, 290, 330, 310],
+lineStyle: {
+color: 'rgba(141, 211, 199, 1)'
+},
+areaStyle: {
+color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+offset: 0,
+color: 'rgba(141, 211, 199, 0.1)'
+}, {
+offset: 1,
+color: 'rgba(141, 211, 199, 0)'
+}])
+}
+},
+{
+name: 'YouTube',
+type: 'line',
+smooth: true,
+symbol: 'none',
+data: [150, 232, 201, 154, 190, 330, 410],
+lineStyle: {
+color: 'rgba(251, 191, 114, 1)'
+},
+areaStyle: {
+color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+offset: 0,
+color: 'rgba(251, 191, 114, 0.1)'
+}, {
+offset: 1,
+color: 'rgba(251, 191, 114, 0)'
+}])
+}
+},
+{
+name: 'Facebook',
+type: 'line',
+smooth: true,
+symbol: 'none',
+data: [320, 332, 301, 334, 390, 330, 320],
+lineStyle: {
+color: 'rgba(252, 141, 98, 1)'
+},
+areaStyle: {
+color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+offset: 0,
+color: 'rgba(252, 141, 98, 0.1)'
+}, {
+offset: 1,
+color: 'rgba(252, 141, 98, 0)'
+}])
+}
+}
+]
+};
+const brandExposureOption = {
+animation: false,
+tooltip: {
+trigger: 'axis',
+backgroundColor: 'rgba(255, 255, 255, 0.9)',
+textStyle: {
+color: '#1f2937'
+}
+},
+grid: {
+top: 10,
+right: 10,
+bottom: 20,
+left: 40
+},
+xAxis: {
+type: 'category',
+data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+axisLine: {
+lineStyle: {
+color: '#4B5563'
+}
+},
+axisLabel: {
+color: '#9CA3AF'
+}
+},
+yAxis: {
+type: 'value',
+axisLine: {
+lineStyle: {
+color: '#4B5563'
+}
+},
+axisLabel: {
+color: '#9CA3AF'
+},
+splitLine: {
+lineStyle: {
+color: '#374151'
+}
+}
+},
+series: [{
+data: [820, 932, 901, 934, 1290, 1330, 1320],
+type: 'line',
+smooth: true,
+symbol: 'none',
+lineStyle: {
+color: 'rgba(147, 51, 234, 1)'
+},
+areaStyle: {
+color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+offset: 0,
+color: 'rgba(147, 51, 234, 0.2)'
+}, {
+offset: 1,
+color: 'rgba(147, 51, 234, 0)'
+}])
+}
+}]
+};
+const keywordOption = {
+animation: false,
+tooltip: {
+trigger: 'axis',
+backgroundColor: 'rgba(255, 255, 255, 0.9)',
+textStyle: {
+color: '#1f2937'
+}
+},
+legend: {
+data: ['K-Beauty', 'Skin Care'],
+textStyle: {
+color: '#9CA3AF'
+},
+top: 0
+},
+grid: {
+top: 40,
+right: 20,
+bottom: 20,
+left: 40
+},
+xAxis: {
+type: 'category',
+data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+axisLine: {
+lineStyle: {
+color: '#4B5563'
+}
+},
+axisLabel: {
+color: '#9CA3AF'
+}
+},
+yAxis: {
+type: 'value',
+name: 'Mentions',
+nameTextStyle: {
+color: '#9CA3AF'
+},
+axisLine: {
+lineStyle: {
+color: '#4B5563'
+}
+},
+axisLabel: {
+color: '#9CA3AF'
+},
+splitLine: {
+lineStyle: {
+color: '#374151'
+}
+}
+},
+series: [
+{
+name: 'K-Beauty',
+type: 'line',
+smooth: true,
+symbol: 'none',
+data: [2300, 2800, 3200, 4100, 4800, 5200, 5900],
+lineStyle: {
+color: 'rgba(87, 181, 231, 1)'
+},
+areaStyle: {
+color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+offset: 0,
+color: 'rgba(87, 181, 231, 0.1)'
+}, {
+offset: 1,
+color: 'rgba(87, 181, 231, 0)'
+}])
+}
+},
+{
+name: 'Skin Care',
+type: 'line',
+smooth: true,
+symbol: 'none',
+data: [1800, 2100, 2600, 3200, 3800, 4100, 4500],
+lineStyle: {
+color: 'rgba(141, 211, 199, 1)'
+},
+areaStyle: {
+color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+offset: 0,
+color: 'rgba(141, 211, 199, 0.1)'
+}, {
+offset: 1,
+color: 'rgba(141, 211, 199, 0)'
+}])
+}
+}
+]
+};
+trendChart.setOption(trendOption);
+brandExposureChart.setOption(brandExposureOption);
+keywordChart.setOption(keywordOption);
+window.addEventListener('resize', () => {
+trendChart.resize();
+brandExposureChart.resize();
+keywordChart.resize();
+});
+document.querySelectorAll('.ri-file-copy-line').forEach(button => {
+button.addEventListener('click', function() {
+const content = this.closest('.surface').querySelector('p').textContent;
+navigator.clipboard.writeText(content);
+const originalIcon = this.className;
+this.className = 'ri-check-line';
+setTimeout(() => {
+this.className = originalIcon;
+}, 2000);
+});
+});
+</script>
+</body>
+</html>
